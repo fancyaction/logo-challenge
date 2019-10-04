@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Header from './Header';
-// import ResetButton from './ResetButton';
+import ResetButton from './ResetButton';
 // import ScoreBox from './ScoreBox';
 
 const useStyles = makeStyles(theme => ({
@@ -39,8 +39,8 @@ const LogoChallenge = () => {
         <Container maxWidth="sm">
             <Paper className={classes.root}>
                 <Header />
-                {/* <ResetButton resetGame={resetGame} />
-                <ScoreBox score={score} /> */}
+                <ResetButton resetGame={resetGame} />
+                {/* <ScoreBox score={score} /> */}
             </Paper>
         </Container>
     )
