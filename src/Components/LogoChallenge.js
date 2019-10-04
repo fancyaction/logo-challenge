@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Header from './Header';
 import ResetButton from './ResetButton';
 import ScoreBox from './ScoreBox';
+import logo from '../assets/img/ia-logo-back.png' // relative path to image 
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -14,6 +15,8 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
 }));
+
+const Logo = () => <div><img src={logo} alt="Logo" width='100%' /></div>
 
 const LogoChallenge = () => {
     const classes = useStyles();
@@ -41,6 +44,7 @@ const LogoChallenge = () => {
                 <Header />
                 <ResetButton resetGame={resetGame} />
                 <ScoreBox score={score} />
+                <Logo />
             </Paper>
         </Container>
     )
