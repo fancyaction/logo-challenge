@@ -78,7 +78,7 @@ const Logo = ({ active, updateScore }) => {
             <div id="location3" className={classes.location3}></div>
             <div id="location4" className={classes.location4}></div>
             <div id="location5" className={classes.location5}></div>
-            <img id="logo" src={logo} alt="Logo" />
+            <img id="logo" src={logo} alt="Logo" draggable={false} />
         </div>
     );
 };
