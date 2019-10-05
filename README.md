@@ -1,4 +1,4 @@
-Live Example: logo-challenge-allistair.surge.sh
+Live Example: http://logo-challenge-allistair.surge.sh
 
 # Logo Challenge
 
