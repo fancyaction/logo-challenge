@@ -4,11 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Header from './Header';
 import ResetButton from './ResetButton';
 import ScoreBox from './ScoreBox';
+import Nodes from './Nodes';
 import logo from '../assets/img/ia-logo-back.png';
-import nodeBlack from '../assets/img/ia-logo-dot-black.png';
-import nodeBlue from '../assets/img/ia-logo-dot-blue.png';
-import nodeGreen from '../assets/img/ia-logo-dot-green.png';
-import nodeRed from '../assets/img/ia-logo-dot-red.png';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -77,16 +74,9 @@ const drop = active => ev => {
     ev.preventDefault();
     const data = ev.dataTransfer.getData(active);
 
-    if (answers[location].includes(active) || answers[location] == active) {
+    if (answers[location].includes(active) || answers[location] === active) {
         ev.target.appendChild(document.getElementById(data));
     }
-};
-
-const onDragStart = setActive => ev => {
-    const nodeName = ev.target.id;
-    
-    setActive(nodeName);
-    ev.dataTransfer.setData(nodeName, nodeName);
 };
 
 const Logo = ({ classes, active }) => (
@@ -100,49 +90,9 @@ const Logo = ({ classes, active }) => (
     </div>
 );
 
-const Node = ({ classes, nodes, setActive }) => (
-    <div>
-        <img
-            id="nodeBlack"
-            src={nodeBlack}
-            alt="Black Node"
-            draggable={!nodes.location1}
-            onDragStart={onDragStart(setActive)}
-        />
-        <img
-            id="nodeBlack2"
-            src={nodeBlack}
-            alt="Black Node Two"
-            draggable={!nodes.location2}
-            onDragStart={onDragStart(setActive)}
-        />
-        <img
-            id="nodeBlue"
-            src={nodeBlue}
-            alt="Blue Node"
-            draggable={!nodes.location3}
-            onDragStart={onDragStart(setActive)}
-        />
-        <img
-            id="nodeGreen"
-            src={nodeGreen}
-            alt="Green Node"
-            draggable={!nodes.location4}
-            onDragStart={onDragStart(setActive)}
-        />
-        <img
-            id="nodeRed"
-            src={nodeRed}
-            alt="Red Node"
-            draggable={!nodes.location5}
-            onDragStart={onDragStart(setActive)}
-        />
-    </div>
-);
-
 const LogoChallenge = () => {
     const classes = useStyles();
-    const [nodes, setNodes] = React.useState({
+    const [locations, setLocations] = React.useState({
         location1: false,
         location2: false,
         location3: false,
@@ -154,7 +104,7 @@ const LogoChallenge = () => {
 
     const resetGame = () => {
         setScore(0);
-        setNodes({
+        setLocations({
             location1: false,
             location2: false,
             location3: false,
@@ -169,8 +119,8 @@ const LogoChallenge = () => {
                 <Header />
                 <ResetButton resetGame={resetGame} />
                 <ScoreBox score={score} />
-                <Logo classes={classes} active={active} />
-                <Node classes={classes} nodes={nodes} setActive={setActive} />
+                <Logo classes={classes} active={active} setLocations={setLocations} setScore={setScore} />
+                <Nodes locations={locations} setActive={setActive} />
             </Paper>
         </Container>
     );
