@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         '& img': { zIndex: '-1', width: '100%', display: 'block' }
     },
-    nodeOne: {
+    location1: {
         border: '5px solid red',
         position: 'absolute',
         width: '22%',
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '50%',
         transform: 'translate(171%, 13%)'
     },
-    nodeTwo: {
+    location2: {
         border: '5px solid red',
         position: 'absolute',
         width: '22%',
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '50%',
         transform: 'translate(296%, 29%)'
     },
-    nodeThree: {
+    location3: {
         border: '5px solid red',
         position: 'absolute',
         width: '22%',
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '50%',
         transform: 'translate(271%, 180%)'
     },
-    nodeFour: {
+    location4: {
         border: '5px solid red',
         position: 'absolute',
         width: '22%',
@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '50%',
         transform: 'translate(80%, 213%)'
     },
-    nodeFive: {
+    location5: {
         border: '5px solid red',
         position: 'absolute',
         width: '22%',
@@ -64,59 +64,78 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const drop = ev => {
+const answers = {
+    location1: 'nodeBlue',
+    location2: 'nodeRed',
+    location3: ['nodeBlack', 'nodeBlack2'],
+    location4: 'nodeGreen',
+    location5: ['nodeBlack', 'nodeBlack2']
+}
+
+const drop = active => ev => {
+    const location = ev.target.id;
     ev.preventDefault();
-    const data = ev.dataTransfer.getData('text');
-    ev.target.appendChild(document.getElementById(data));
+    const data = ev.dataTransfer.getData(active);
+
+    if (answers[location].includes(active) || answers[location] == active) {
+        ev.target.appendChild(document.getElementById(data));
+    }
 };
 
-const Logo = ({ classes }) => (
-    <div className={classes.logoContainer} onDrop={drop} onDragOver={ev => ev.preventDefault()}>
-        <div className={classes.nodeOne}></div>
-        <div className={classes.nodeTwo}></div>
-        <div className={classes.nodeThree}></div>
-        <div className={classes.nodeFour}></div>
-        <div className={classes.nodeFive}></div>
+const onDragStart = setActive => ev => {
+    const nodeName = ev.target.id;
+    
+    setActive(nodeName);
+    ev.dataTransfer.setData(nodeName, nodeName);
+};
+
+const Logo = ({ classes, active }) => (
+    <div className={classes.logoContainer} onDrop={drop(active)} onDragOver={ev => ev.preventDefault()}>
+        <div id="location1" className={classes.location1}></div>
+        <div id="location2" className={classes.location2}></div>
+        <div id="location3" className={classes.location3}></div>
+        <div id="location4" className={classes.location4}></div>
+        <div id="location5" className={classes.location5}></div>
         <img id="logo" src={logo} alt="Logo" />
     </div>
 );
 
-const Node = ({ classes }) => (
+const Node = ({ classes, nodes, setActive }) => (
     <div>
         <img
             id="nodeBlack"
             src={nodeBlack}
             alt="Black Node"
-            draggable="true"
-            onDragStart={ev => ev.dataTransfer.setData('text', ev.target.id)}
+            draggable={!nodes.location1}
+            onDragStart={onDragStart(setActive)}
         />
         <img
             id="nodeBlack2"
             src={nodeBlack}
             alt="Black Node Two"
-            draggable="true"
-            onDragStart={ev => ev.dataTransfer.setData('text', ev.target.id)}
+            draggable={!nodes.location2}
+            onDragStart={onDragStart(setActive)}
         />
         <img
             id="nodeBlue"
             src={nodeBlue}
             alt="Blue Node"
-            draggable="true"
-            onDragStart={ev => ev.dataTransfer.setData('text', ev.target.id)}
+            draggable={!nodes.location3}
+            onDragStart={onDragStart(setActive)}
         />
         <img
             id="nodeGreen"
             src={nodeGreen}
             alt="Green Node"
-            draggable="true"
-            onDragStart={ev => ev.dataTransfer.setData('text', ev.target.id)}
+            draggable={!nodes.location4}
+            onDragStart={onDragStart(setActive)}
         />
         <img
             id="nodeRed"
             src={nodeRed}
             alt="Red Node"
-            draggable="true"
-            onDragStart={ev => ev.dataTransfer.setData('text', ev.target.id)}
+            draggable={!nodes.location5}
+            onDragStart={onDragStart(setActive)}
         />
     </div>
 );
@@ -124,22 +143,25 @@ const Node = ({ classes }) => (
 const LogoChallenge = () => {
     const classes = useStyles();
     const [nodes, setNodes] = React.useState({
-        nodeLocation1: [0, 0],
-        nodeLocation2: [0, 0],
-        nodeLocation3: [0, 0],
-        nodeLocation4: [0, 0],
-        nodeLocation5: [0, 0]
+        location1: false,
+        location2: false,
+        location3: false,
+        location4: false,
+        location5: false
     });
     const [score, setScore] = React.useState(0);
+    const [active, setActive] = React.useState();
 
-    const resetGame = () =>
+    const resetGame = () => {
+        setScore(0);
         setNodes({
-            nodeLocation1: [0, 0],
-            nodeLocation2: [0, 0],
-            nodeLocation3: [0, 0],
-            nodeLocation4: [0, 0],
-            nodeLocation5: [0, 0]
+            location1: false,
+            location2: false,
+            location3: false,
+            location4: false,
+            location5: false
         });
+    };
 
     return (
         <Container maxWidth="sm">
@@ -147,8 +169,8 @@ const LogoChallenge = () => {
                 <Header />
                 <ResetButton resetGame={resetGame} />
                 <ScoreBox score={score} />
-                <Logo classes={classes} />
-                <Node classes={classes} />
+                <Logo classes={classes} active={active} />
+                <Node classes={classes} nodes={nodes} setActive={setActive} />
             </Paper>
         </Container>
     );
