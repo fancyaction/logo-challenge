@@ -65,7 +65,9 @@ const Logo = ({ active, updateScore }) => {
         const location = ev.target.id;
         const data = ev.dataTransfer.getData(active);
 
-        if (answers[location].includes(active) || answers[location] === active) {
+        if ('logo' === location) {
+            return;
+        } else if (answers[location].includes(active) || answers[location] === active) {
             ev.target.appendChild(document.getElementById(data));
             updateScore(location);
         }
