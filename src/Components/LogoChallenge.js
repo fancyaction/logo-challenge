@@ -1,11 +1,13 @@
 import React from 'react';
 import { Container, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import ConfettiGenerator from 'confetti-js';
 import Header from './Header';
 import ResetButton from './ResetButton';
 import ScoreBox from './ScoreBox';
 import Nodes from './Nodes';
 import Logo from './Logo';
+import SuccessWindow from './SuccessWindow';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -14,7 +16,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column'
-    },
+    }
 }));
 
 const LogoChallenge = () => {
@@ -33,15 +35,21 @@ const LogoChallenge = () => {
         window.location.reload();
     };
 
+    const celebration = () => {
+        const confetti = new ConfettiGenerator({ target: 'success-canvas' });
+        confetti.render();
+    };
+
     const updateScore = location => {
-        setLocations({...locations, [location]: true});
+        setLocations({ ...locations, [location]: true });
         setScore(score + 1);
-        return 5 === score + 1 ? console.log('YOU WIN!') : '';
-    }
+        return 5 === score + 1 ? celebration() : '';
+    };
 
     return (
         <Container maxWidth="sm">
             <Paper className={classes.root}>
+                <SuccessWindow show={5 === score} resetGame={resetGame} />
                 <Header />
                 <ResetButton resetGame={resetGame} />
                 <ScoreBox score={score} />
