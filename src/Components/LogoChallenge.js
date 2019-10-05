@@ -113,6 +113,12 @@ const LogoChallenge = () => {
         });
     };
 
+    const updateScore = location => {
+        setLocations({...locations, [location]: true});
+        setScore(score + 1);
+        return 5 === score + 1 ? console.log('YOU WIN!') : '';
+    }
+
     return (
         <Container maxWidth="sm">
             <Paper className={classes.root}>
