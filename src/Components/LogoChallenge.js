@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LogoChallenge = () => {
+    const WINNING_SCORE = 5;
     const classes = useStyles();
     const [locations, setLocations] = React.useState({
         location1: false,
@@ -43,13 +44,13 @@ const LogoChallenge = () => {
     const updateScore = location => {
         setLocations({ ...locations, [location]: true });
         setScore(score + 1);
-        return 5 === score + 1 ? celebration() : '';
+        return WINNING_SCORE === score + 1 ? celebration() : '';
     };
 
     return (
         <Container maxWidth="sm">
             <Paper className={classes.root}>
-                <SuccessWindow show={5 === score} resetGame={resetGame} />
+                <SuccessWindow show={WINNING_SCORE === score} resetGame={resetGame} />
                 <Header />
                 <ResetButton resetGame={resetGame} />
                 <ScoreBox score={score} />
